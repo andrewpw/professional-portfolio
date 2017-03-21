@@ -6,6 +6,6 @@
     .controller('HomeController', HomeController);
 
   function HomeController($scope) {
-
+    alert("hello");
   }
 })();
