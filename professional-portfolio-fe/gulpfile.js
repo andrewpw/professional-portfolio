@@ -15,12 +15,12 @@ gulp.task('default', function(callback) {
   runSequence(['sass', 'browserSync'], 'watch', callback)
 });
 
-//Cleans the dist directory and calls gulp tasks to build all files for production
+//Cleans the static directory and calls gulp tasks to build all files for production
 gulp.task('build', function(callback) {
   runSequence(
-    'clean:dist',
+    'clean:static',
     'sass',
-    ['useref', 'images', 'fonts'],
+    ['useref', 'images', 'fonts', 'angular'],
     callback
   )
 });
@@ -47,11 +47,11 @@ gulp.task('sass', function() {
 //Useref concatenates any js or css files that are inside the <!--build --> tag on the index page
 //uglify and cssnano minify the js and css files respectively as determined by gulpIf
 gulp.task('useref', function() {
-  return gulp.src('app/*.html')
+  return gulp.src(['app/**/*.html', '!app/bower_components/**'])
     .pipe(useref())
     .pipe(gulpIf('*.js', uglify()))
     .pipe(gulpIf('*.css', cssnano()))
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('../professional-portfolio/src/main/resources/static'))
 });
 
 //Watches for changes to scss, html or js files and runs the appropriate task when changes are detected
@@ -66,16 +66,22 @@ gulp.task('watch', function() {
 gulp.task('images', function() {
   return gulp.src('app/images/**/*.+(png|jpg|gif|svg)')
     .pipe(cache(imagemin()))
-    .pipe(gulp.dest('dist/images'))
+    .pipe(gulp.dest('../professional-portfolio/src/main/resources/static'))
 });
 
-//Moves any custom font files to the dist directory
+//Moves any custom font files to the static directory
 gulp.task('fonts', function() {
   return gulp.src('app/fonts/**/*')
-    .pipe(gulp.dest('dist/fonts'))
+    .pipe(gulp.dest('../professional-portfolio/src/main/resources/static'))
 });
 
-//Deletes the dist directory
-gulp.task('clean:dist', function() {
-  return del.sync('dist');
+//Moves angular files to the static directory
+gulp.task('angular', function() {
+  return gulp.src(['app/app.module.js', 'app/app.routes.js'])
+    .pipe(gulp.dest('../professional-portfolio/src/main/resources/static'))
+});
+
+//Deletes the static directory
+gulp.task('clean:static', function() {
+  return del.sync('../professional-portfolio/src/main/resources/static', {force: true});
 });

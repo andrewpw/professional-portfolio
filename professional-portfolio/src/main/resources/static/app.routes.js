@@ -11,12 +11,7 @@
       .state('home', {
         url: "/",
         templateUrl: "components/home/home.html",
-        controller: "HomeController"
-      })
-      .state('journey', {
-        url: "/journey",
-        templateUrl: "components/journey/journey.html",
-        controller: "JourneyController"
+        controllerAs: "HomeController"
       })
     ;
 

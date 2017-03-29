@@ -1,1 +1,0 @@
-var reallyLongVarName = alert("hello");
